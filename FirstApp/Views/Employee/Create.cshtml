@@ -1,0 +1,49 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Create";
+}
+@* <a asp-action="Index">View All Employees</a> *@
+<h2>Create</h2>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="UserName">Your Name:</label>
+        <input class="input-validation-error" data-val="true" data-val-required="Please enter your name" asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+   </div>
+    <div class="form-group">
+        <label asp-for="Age">Your Age:</label>
+        <input class="input-validation-error" data-val="true" data-val-required="Please enter your Age" asp-for="Age" />
+        <span asp-validation-for="Age"></span>
+   </div>
+    <div class="form-group">
+        <label asp-for="Salary">Your Salary:</label>
+        <input  asp-for="Salary" />
+        <span asp-validation-for="Salary"></span>
+   </div>
+    <div class="form-group">
+        <label asp-for="Department">Your Department:</label>
+        <select asp-for="Department">
+            <option value="Development">Development</option>
+            <option value="HR">HR</option>
+            <option value="Research">Research</option>
+        </select>
+        <span asp-validation-for="Department"></span>
+   </div>
+    <div class="form-group">
+        <label asp-for="Sex">Your Sex:</label>
+        <input class="input-validation-error" data-val="true" data-val-required="Please enter your Sex" type="radio" asp-for="Sex" value="M" />Male
+        <input class="input-validation-error" data-val="true" data-val-required="Please enter your Sex" type="radio" asp-for="Sex" value="F" />Female
+        <span asp-validation-for="Sex"></span>
+   </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input class="input-validation-error" data-val="true" data-val-required="Please enter your Email" asp-for="Email" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input class="input-validation-error" data-val="true" data-val-required="Please enter your Password" asp-for="Password" class="form-control" />
+    </div>
+    <div class="form-group">
+        <button type="submit">Submit</button>
+        </div>
+</form>
