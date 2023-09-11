@@ -4,19 +4,24 @@ namespace FirstApp.Models
 {
     public class EmailHelper
     {
-        private const string adminMailAddress = "tim@is-land.com.tw";
-        private const string adminMailPassword = "yourpassword";
+        private const string adminMailAddress = "jason75951@gmail.com";
+        private const string adminMailPassword = "gmailpwd001";
 
-        private static SmtpClient client;
-
-        public   EmailHelper()
+        private static SmtpClient client = new()
         {
-            client = new SmtpClient
-            {
-                Credentials = new System.Net.NetworkCredential(adminMailAddress, adminMailPassword),
-                Host = "smtpout.secureserver.net",
-                Port = 80
-            };
+            Credentials = new System.Net.NetworkCredential(adminMailAddress, adminMailPassword),
+            Host = "smtpout.secureserver.net",
+            Port = 80
+        };
+
+        public EmailHelper()
+        {
+            //client = new SmtpClient
+            //{
+            //    Credentials = new System.Net.NetworkCredential(adminMailAddress, adminMailPassword),
+            //    Host = "smtpout.secureserver.net",
+            //    Port = 80
+            //};
         }
 
         public static bool SendEmailTwoFactorCode(string userEmail, string code)
@@ -65,6 +70,7 @@ namespace FirstApp.Models
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 // log exception
             }
             return false;

@@ -92,7 +92,7 @@ namespace Identity.Controllers
             {
                 // log email failed 
             }
-            return View(email);
+            return View("ForgotPassword");
         }
 
         [AllowAnonymous]
@@ -104,8 +104,8 @@ namespace Identity.Controllers
         [AllowAnonymous]
         public IActionResult ResetPassword(string token, string email)
         {
-            var model = new ResetPassword { Token = token, Email = email };
-            return View(model);
+            //var model = new ResetPassword { Token = token, Email = email };
+            return View(new ResetPassword { Token = token, Email = email });
         }
 
         [HttpPost]
