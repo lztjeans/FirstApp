@@ -7,7 +7,7 @@ namespace FirstApp.Models
         private const string adminMailAddress = "jason75951@gmail.com";
         private const string adminMailPassword = "gmailpwd001";
 
-        private static SmtpClient client = new()
+        private static readonly SmtpClient client = new()
         {
             Credentials = new System.Net.NetworkCredential(adminMailAddress, adminMailPassword),
             Host = "smtpout.secureserver.net",

@@ -5,12 +5,13 @@
 }
 
 
-@if (Model != null)
+ 
+@*@if (Model != null)
 {
-         <h1 class="display-4">Welcome, @Model.Email</h1>
-   @* <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
-    <partial name="CatalogIndex" /> *@
-}
+         <h1 class="display-4">Welcome, @Model.Email</h1>*@
+   @* <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>*@
+    @*<partial name="CatalogIndex" /> *@
+    @*}*@
 
 
 
@@ -24,4 +25,17 @@ else
 {
     <h1 class="display-4">Welcome </h1>
 }
+                //  @if (User.IsInRole("Administrators"))
+                // {
+                //     <h1 class="display-4">Welcome, @Model.Email</h1>
+                //     <div class="nav-item">
+                //         <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
+                //     </div>
+                // }
+                // else
+                // {
+                //     <div class="nav-item">
+                //         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login" asp-route-ReturnUrl="/">Login</a>
+                //     </div>
+                // }
  *@

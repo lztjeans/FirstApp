@@ -4,15 +4,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using System.ComponentModel.DataAnnotations;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Identity.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        private UserManager<Employee> userManager;
-        private SignInManager<Employee> signInManager;
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly UserManager<Employee> userManager;
+        private readonly SignInManager<Employee> signInManager;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
 
         public AccountController(UserManager<Employee> userMgr, SignInManager<Employee> signinMgr)
@@ -47,16 +48,27 @@ namespace Identity.Controllers
                 if (appUser != null)
                 {
                     await signInManager.SignOutAsync();
-                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, login.Remember, false);
+                    SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, login.Remember, false);
 
-                    if (result.Succeeded)
-                        return View("~/Views/Home/Index.cshtml",login);
+                    login.IsAuthenticated = result.Succeeded;
 
+                    if ( result.Succeeded)
+                    {
+                        if (!string.IsNullOrEmpty(login.ReturnUrl) && Url.IsLocalUrl(login.ReturnUrl))
+                        {
+                            return View("~/Views/Home/Index.cshtml", login);
+                        }
+                        else
+                        {
+                            return Redirect(login.ReturnUrl);
+                        }
+                        //return View("~/Views/Home/Index.cshtml", login);
+                    }
                 }
-                logger.Error("Login Failed: Invalid Email or password.({0}:{1}, {2}:{3})", nameof(login.Email), login.Email, nameof(login.Email),nameof(login.Password),login.Password );
+                logger.Error("Login Failed: Invalid Email or password.({0}:{1}, {2}:{3})", nameof(login.Email), login.Email, nameof(login.Email), nameof(login.Password), login.Password);
                 ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
             }
-            return Redirect(login.ReturnUrl ?? "/");
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Logout()
