@@ -1,3 +1,4 @@
+using FirstApp.Configuration;
 using FirstApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,12 @@ builder.Services.AddAuthorization(opts =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddWebServices(builder.Configuration);
+
+// Add Logger
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 

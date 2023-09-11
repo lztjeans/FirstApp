@@ -1,4 +1,5 @@
-﻿using FirstApp.Models;
+﻿using FirstApp.Logging;
+using FirstApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,13 @@ namespace Identity.Controllers
     {
         private UserManager<Employee> userManager;
         private SignInManager<Employee> signInManager;
+        private readonly IAppLogger<AccountController> _logger;
 
-        public AccountController(UserManager<Employee> userMgr, SignInManager<Employee> signinMgr)
+        public AccountController(UserManager<Employee> userMgr, SignInManager<Employee> signinMgr, IAppLogger<AccountController> logger)
         {
             userManager = userMgr;
             signInManager = signinMgr;
+            _logger = logger;
         }
 
         [AllowAnonymous]
