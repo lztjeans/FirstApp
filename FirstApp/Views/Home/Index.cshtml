@@ -7,18 +7,26 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
  *@
-
-@model string
-
+@using  FirstApp.Models
+@* @model string *@
+@model Login
 @{
     ViewData["Title"] = "Authentication";
 }
 
 @* <h1 class="bg-info text-white">Index</h1> *@
-<h1 class="display-4">Welcome</h1>
-@Model
 
-@if (User?.Identity?.IsAuthenticated ?? false)
+@if (Model != null)
 {
+    <h1 class="display-4">Welcome, @Model.Email</h1>
     <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
 }
+else
+{
+    <h1 class="display-4">Welcome </h1>
+}
+
+
+@* @if (User?.Identity?.IsAuthenticated ?? false)
+{
+} *@

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using FirstApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace FirstApp.Controllers
 {
@@ -52,10 +54,15 @@ namespace FirstApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                Employee appUser = new Employee
+                Employee appUser = new()
                 {
                     UserName = user.UserName,
                     Email = user.Email,
+                    Department = user.Department,
+                    Password = user.Password,
+                    Age = user.Age,
+                    Sex = user.Sex,
+                    Salary = user.Salary ,
                     //TwoFactorEnabled = true
                 };
 
@@ -65,10 +72,18 @@ namespace FirstApp.Controllers
                     return RedirectToAction("Index");
                 else
                 {
-                    foreach (IdentityError error in result.Errors)
-                        ModelState.AddModelError("", error.Description);
+                    StringBuilder errorDescription = new();
+                    //foreach (IdentityError error in result.Errors)
+                    //    errorDescription = error.Description;
+                    //    ModelState.AddModelError("CreateErrors", errorDescription);
+                    //    Console.WriteLine(errorDescription);
+
+                    result.Errors.ToList().ForEach(err => errorDescription.Append("<p></p>").Append(err.Description));
+
+                    ModelState.AddModelError("CreateErrors", errorDescription.ToString());
                 }
             }
+
             return View(user);
         }
 
@@ -77,28 +92,46 @@ namespace FirstApp.Controllers
         {
             Employee user = await userManager.FindByIdAsync(id);
             if (user != null)
+                //return View("C:\\Users\\user\\Source\\Repos\\FirstApp\\FirstApp\\Views\\Employee\\Update.cshtml", user);
                 return View(user);
             else
                 return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(string id, string email, string password)
+        public async Task<IActionResult> Update(string id, string UserName, string email, string Age, string Salary, string Department, char Sex)
         {
             Employee user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
+                if (!string.IsNullOrEmpty(UserName))
+                    user.UserName = UserName;
+                else
+                    ModelState.AddModelError("", "UserName cannot be empty");
+
                 if (!string.IsNullOrEmpty(email))
                     user.Email = email;
                 else
                     ModelState.AddModelError("", "Email cannot be empty");
 
-                if (!string.IsNullOrEmpty(password))
-                    user.PasswordHash = passwordHasher.HashPassword(user, password);
+                if (!string.IsNullOrEmpty(Age))
+                    //user.PasswordHash = passwordHasher.HashPassword(user, password);
+                    user.Age = Convert.ToInt32(Age);
                 else
-                    ModelState.AddModelError("", "Password cannot be empty");
+                    ModelState.AddModelError("", "Age cannot be empty");
 
-                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
+                if (!string.IsNullOrEmpty(Salary))
+                    user.Salary = Convert.ToDecimal(Salary);
+                else
+                    ModelState.AddModelError("", "Salary cannot be empty");
+
+                if (!string.IsNullOrEmpty(Department))
+                    user.Department = Department;
+                else
+                    ModelState.AddModelError("", "Department cannot be empty");
+
+                user.Sex = Sex;
+                if (ModelState.ErrorCount == 0)
                 {
                     IdentityResult result = await userManager.UpdateAsync(user);
                     if (result.Succeeded)

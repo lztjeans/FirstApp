@@ -1,4 +1,5 @@
-﻿@model Employee
+﻿@using static Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary;
+@model Employee
 @{
     ViewData["Title"] = "Create";
 }
@@ -9,17 +10,17 @@
         <label asp-for="UserName">Your Name:</label>
         <input class="input-validation-error" data-val="true" data-val-required="Please enter your name" asp-for="UserName" />
         <span asp-validation-for="UserName"></span>
-   </div>
+   </div><p></p>
     <div class="form-group">
         <label asp-for="Age">Your Age:</label>
         <input class="input-validation-error" data-val="true" data-val-required="Please enter your Age" asp-for="Age" />
         <span asp-validation-for="Age"></span>
-   </div>
+    </div><p></p>
     <div class="form-group">
         <label asp-for="Salary">Your Salary:</label>
         <input  asp-for="Salary" />
         <span asp-validation-for="Salary"></span>
-   </div>
+    </div><p></p>
     <div class="form-group">
         <label asp-for="Department">Your Department:</label>
         <select asp-for="Department">
@@ -28,22 +29,36 @@
             <option value="Research">Research</option>
         </select>
         <span asp-validation-for="Department"></span>
-   </div>
+    </div><p></p>
     <div class="form-group">
         <label asp-for="Sex">Your Sex:</label>
         <input class="input-validation-error" data-val="true" data-val-required="Please enter your Sex" type="radio" asp-for="Sex" value="M" />Male
         <input class="input-validation-error" data-val="true" data-val-required="Please enter your Sex" type="radio" asp-for="Sex" value="F" />Female
         <span asp-validation-for="Sex"></span>
-   </div>
+    </div><p></p>
     <div class="form-group">
         <label asp-for="Email"></label>
         <input class="input-validation-error" data-val="true" data-val-required="Please enter your Email" asp-for="Email" class="form-control" />
-    </div>
+        <span asp-validation-for="Email"></span>
+    </div><p></p>
     <div class="form-group">
         <label asp-for="Password"></label>
         <input class="input-validation-error" data-val="true" data-val-required="Please enter your Password" asp-for="Password" class="form-control" />
-    </div>
+        <span asp-validation-for="Password"></span>
+    </div><p></p>
     <div class="form-group">
         <button type="submit">Submit</button>
-        </div>
+    </div>
+    <div class="form-group">
+        @{
+            // foreach (ModelState modelState in ViewData.ModelState.Values) {
+            // foreach (ModelError error in modelState.Errors) {
+            // DoSomethingWith(error);
+            // }
+            // }
+            // ViewData.ModelState.Values.E
+            @Html.ValidationMessage("CreateErrors");
+            // <span class="field-validation-error" data-valmsg-for="CreateErrors" data-valmsg-replace="true"></span> 
+        }
+    </div>
 </form>

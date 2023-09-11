@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Models
+namespace FirstApp.Models
 {
     public class AppIdentityDbContext : IdentityDbContext<Employee>
     {

@@ -3,7 +3,7 @@
     ViewData["Title"] = "Index";
     // Layout = null;
 }
-<a asp-action="Create">Create an Employees</a>
+@* <a asp-action="Create">Create an Employees</a> *@
 
 <h2>Here is the list of Employees</h2>
 <table style="width:50%">
@@ -31,9 +31,9 @@
                 <td>@e.Department</td>
                 <td>@e.Sex</td>
                 <td>@e.Email </td>
-                <td><a asp-action="Update" asp-route-empname="@e.UserName">Update</a></td>
+                <td><a asp-action="Update" asp-route-id="@e.Id">Update</a></td>
                 <td>
-                    <form asp-route-empname="@e.UserName" asp-action="Delete" method="post">
+                    <form asp-route-id="@e.Id" asp-action="Delete" method="post">
                         <button type="submit">Delete</button>
                     </form>
                 </td>

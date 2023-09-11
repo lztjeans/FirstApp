@@ -1,6 +1,6 @@
 ﻿using System.Net.Mail;
 
-namespace Identity.Models
+namespace FirstApp.Models
 {
     public class EmailHelper
     {
