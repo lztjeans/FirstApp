@@ -30,7 +30,7 @@ builder.Services.AddAuthorization(opts =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddWebServices(builder.Configuration);
+//builder.Services.AddWebServices(builder.Configuration);
 
 // Add Logger
 builder.Logging.ClearProviders();
