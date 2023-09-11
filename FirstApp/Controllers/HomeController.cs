@@ -1,17 +1,15 @@
 ﻿using FirstApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
 using System.Diagnostics;
 
 namespace FirstApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        public HomeController()        {        }
 
         public IActionResult Index()
         {
