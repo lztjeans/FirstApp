@@ -7,6 +7,7 @@ using FirstApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using NLog;
 
 namespace FirstApp.Controllers
 {
@@ -14,6 +15,7 @@ namespace FirstApp.Controllers
     {
         private UserManager<Employee> userManager;
         private IPasswordHasher<Employee> passwordHasher;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public EmployeeController(UserManager<Employee> usrMgr, IPasswordHasher<Employee> passwordHash)
         {
@@ -78,9 +80,9 @@ namespace FirstApp.Controllers
                     //    ModelState.AddModelError("CreateErrors", errorDescription);
                     //    Console.WriteLine(errorDescription);
 
-                    result.Errors.ToList().ForEach(err => errorDescription.Append("<p></p>").Append(err.Description));
-
+                    result.Errors.ToList().ForEach(err => errorDescription.Append("<p>").Append(err.Description).Append("</p>"));
                     ModelState.AddModelError("CreateErrors", errorDescription.ToString());
+                    logger.Error(errorDescription.ToString());
                 }
             }
 
