@@ -44,10 +44,14 @@
                         </li>
                     </ul>
                 </div>
-                
+                @if (User?.Identity?.IsAuthenticated ?? true)
+                {
+                    
+                }
                 @if(Model != null && Model.IsAuthenticated)
-                {                                           
-                    <h1 class="display-2">Welcome, @Model.Email</h1>
+                {
+                    <div class="display-8">Welcome, @Model.Email</div>
+                    <div class="nav-item"> </div>
                     <div class="nav-item">
                         <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
                     </div>                    
