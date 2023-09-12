@@ -7,9 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Authorization\**" />
+    <Compile Remove="Service\**" />
     <Compile Remove="Views\First\**" />
+    <Content Remove="Authorization\**" />
+    <Content Remove="Service\**" />
     <Content Remove="Views\First\**" />
+    <EmbeddedResource Remove="Authorization\**" />
+    <EmbeddedResource Remove="Service\**" />
     <EmbeddedResource Remove="Views\First\**" />
+    <None Remove="Authorization\**" />
+    <None Remove="Service\**" />
     <None Remove="Views\First\**" />
   </ItemGroup>
 
