@@ -13,11 +13,11 @@ namespace FirstApp.Controllers
 {
     public class EmployeeController : Controller
     {
-        private UserManager<Employee> userManager;
-        private IPasswordHasher<Employee> passwordHasher;
+        private UserManager<ApplicationUser> userManager;
+        private IPasswordHasher<ApplicationUser> passwordHasher;
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public EmployeeController(UserManager<Employee> usrMgr, IPasswordHasher<Employee> passwordHash)
+        public EmployeeController(UserManager<ApplicationUser> usrMgr, IPasswordHasher<ApplicationUser> passwordHash)
         {
             userManager = usrMgr;
             passwordHasher = passwordHash;
@@ -52,11 +52,11 @@ namespace FirstApp.Controllers
         //}
 
         [HttpPost]
-        public async Task<IActionResult> Create(Employee user)
+        public async Task<IActionResult> Create(ApplicationUser user)
         {
             if (ModelState.IsValid)
             {
-                Employee appUser = new()
+                ApplicationUser appUser = new()
                 {
                     UserName = user.UserName,
                     Email = user.Email,
@@ -92,7 +92,7 @@ namespace FirstApp.Controllers
 
         public async Task<IActionResult> Update(string id)
         {
-            Employee user = await userManager.FindByIdAsync(id);
+            ApplicationUser user = await userManager.FindByIdAsync(id);
             if (user != null)
                 //return View("C:\\Users\\user\\Source\\Repos\\FirstApp\\FirstApp\\Views\\Employee\\Update.cshtml", user);
                 return View(user);
@@ -103,7 +103,7 @@ namespace FirstApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(string id, string UserName, string email, string Age, string Salary, string Department, char Sex)
         {
-            Employee user = await userManager.FindByIdAsync(id);
+            ApplicationUser user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
                 if (!string.IsNullOrEmpty(UserName))
@@ -150,7 +150,7 @@ namespace FirstApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            Employee user = await userManager.FindByIdAsync(id);
+            ApplicationUser user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
                 IdentityResult result = await userManager.DeleteAsync(user);

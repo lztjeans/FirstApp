@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FirstApp.Models
 {
-    public class Employee : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         [Required(ErrorMessage = "Please enter your name")]
         public override string UserName { get; set; }

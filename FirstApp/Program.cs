@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]));
-builder.Services.AddIdentity<Employee, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
 builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -16,14 +16,32 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-builder.Services.AddAuthorization(opts =>
+//builder.Services.AddAuthorization(opts =>
+//{
+//    opts.AddPolicy("AspManager", policy =>
+//    {
+//        policy.RequireRole("Manager");
+//        policy.RequireClaim("Coding-Skill", "ASP.NET Core MVC");
+//    });
+//});
+
+builder.Services.AddAuthentication("Cookies").AddCookie(options =>
 {
-    opts.AddPolicy("AspManager", policy =>
-    {
-        policy.RequireRole("Manager");
-        policy.RequireClaim("Coding-Skill", "ASP.NET Core MVC");
-    });
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+    options.SlidingExpiration = true;
+    options.AccessDeniedPath = "/Account/AccessDenied.cshtml";
 });
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
 // Add services to the container.
@@ -44,6 +62,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//app.UseSession();
+app.UseCookiePolicy();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

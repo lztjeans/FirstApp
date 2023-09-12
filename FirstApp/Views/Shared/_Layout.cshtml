@@ -1,4 +1,7 @@
-﻿@using System.Security.Claims﻿
+﻿@* @using System.Security.Claims﻿ *@
+@* @using Microsoft.AspNetCore.Mvc; *@
+@using Microsoft.AspNetCore.Http
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,17 +47,15 @@
                         </li>
                     </ul>
                 </div>
-                @if (User?.Identity?.IsAuthenticated ?? true)
+               
+
+                @if (Context!.User!.Identity!.IsAuthenticated)
                 {
-                    
-                }
-                @if(Model != null && Model.IsAuthenticated)
-                {
-                    <div class="display-8">Welcome, @Model.Email</div>
+                    <div class="display-8">Welcome, @User.Identity.Name </div>
                     <div class="nav-item"> </div>
                     <div class="nav-item">
                         <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
-                    </div>                    
+                    </div>
                 }
                 else
                 {
@@ -62,6 +63,23 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login" asp-route-ReturnUrl="/">Login</a>
                     </div>
                 }
+
+
+@*                 @if(Model != null && Model.IsAuthenticated)
+                {
+                    <div class="display-8">Welcome, @Model.Email</div>
+                    <div class="nav-item"> </div>
+                    <div class="nav-item">
+                        <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login" asp-route-ReturnUrl="/">Login</a>
+                    </div>
+                } 
+*@
             </div>
         </nav>
     </header>

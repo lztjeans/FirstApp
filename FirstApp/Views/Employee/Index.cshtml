@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Employee>
+﻿@model IEnumerable<ApplicationUser>
 @{
     ViewData["Title"] = "Index";
     // Layout = null;
@@ -21,7 +21,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (Employee e in Model)
+        @foreach (ApplicationUser e in Model)
         {
             <tr>
                 <td>@e.Id</td>

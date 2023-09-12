@@ -1,22 +1,33 @@
 ﻿using FirstApp.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using FirstApp.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Caching.Memory;
+using FirstApp.Service;
+using Microsoft.AspNetCore.Http;
 
 namespace Identity.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly UserManager<Employee> userManager;
-        private readonly SignInManager<Employee> signInManager;
+        public const string SessionKeyName = "_Name";
+        public const string SessionKeyAge = "_Age";
+
+        private readonly ITokenClaimsService _tokenClaimsService;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
 
-        public AccountController(UserManager<Employee> userMgr, SignInManager<Employee> signinMgr)
+        public AccountController(UserManager<ApplicationUser> userMgr, SignInManager<ApplicationUser> signinMgr)
         {
             userManager = userMgr;
             signInManager = signinMgr;
@@ -44,25 +55,43 @@ namespace Identity.Controllers
         {
             if (ModelState.IsValid)
             {
-                Employee appUser = await userManager.FindByEmailAsync(login.Email);
+                ApplicationUser appUser = await userManager.FindByEmailAsync(login.Email);
                 if (appUser != null)
                 {
                     await signInManager.SignOutAsync();
-                    SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, login.Remember, false);
-
-                    login.IsAuthenticated = result.Succeeded;
+                    Microsoft.AspNetCore.Identity.SignInResult result  = await signInManager.PasswordSignInAsync(appUser, login.Password, login.Remember, false);
 
                     if ( result.Succeeded)
                     {
                         if (!string.IsNullOrEmpty(login.ReturnUrl) && Url.IsLocalUrl(login.ReturnUrl))
                         {
-                            return View("~/Views/Home/Index.cshtml", login);
-                        }
-                        else
-                        {
+                            var claims = new List<Claim>
+                            {
+                                new Claim("Account", appUser.UserName),
+                                new Claim("Email", appUser.Email ),
+                               // new Claim(ClaimTypes.Role, "Administrator")
+                            };
+
+                            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                            //if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKeyName)))
+                            //{
+                            //    //Session["LoginAccount"] = item.Account;
+                            //    //HttpContext.Session.SetString("LoginAccount", "The Doctor");
+                            //    //HttpContext.Session.SetString("IsAuthenticated", result.Succeeded);
+                            //    //HttpContext.Session.SetInt32(SessionKeyAge, 73);
+                            //}
+                            //var name = HttpContext.Session.GetString(SessionKeyName);
+                            //var age = HttpContext.Session.GetInt32(SessionKeyAge).ToString();
+
+                            //logger.Info("Session Name: {Name}", name);
+                            //logger.Info("Session Age: {Age}", age);
+
                             return Redirect(login.ReturnUrl);
+                            //return View("~/Views/Home/Index.cshtml", login);
                         }
-                        //return View("~/Views/Home/Index.cshtml", login);
+
                     }
                 }
                 logger.Error("Login Failed: Invalid Email or password.({0}:{1}, {2}:{3})", nameof(login.Email), login.Email, nameof(login.Email), nameof(login.Password), login.Password);
@@ -156,7 +185,60 @@ namespace Identity.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [Authorize]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCurrentUser() =>    Ok(await CreateUserInfo(User));
+
+
+        private async Task<UserInfo> CreateUserInfo(ClaimsPrincipal claimsPrincipal)
+        {
+            if (claimsPrincipal.Identity == null || claimsPrincipal.Identity.Name == null || !claimsPrincipal.Identity.IsAuthenticated)
+            {
+                return UserInfo.Anonymous;
+            }
+
+            var userInfo = new UserInfo
+            {
+                IsAuthenticated = true
+            };
+
+            if (claimsPrincipal.Identity is ClaimsIdentity claimsIdentity)
+            {
+                userInfo.NameClaimType = claimsIdentity.NameClaimType;
+                userInfo.RoleClaimType = claimsIdentity.RoleClaimType;
+            }
+            else
+            {
+                userInfo.NameClaimType = "name";
+                userInfo.RoleClaimType = "role";
+            }
+
+            if (claimsPrincipal.Claims.Any())
+            {
+                var claims = new List<ClaimValue>();
+                var nameClaims = claimsPrincipal.FindAll(userInfo.NameClaimType);
+                foreach (var claim in nameClaims)
+                {
+                    claims.Add(new ClaimValue(userInfo.NameClaimType, claim.Value));
+                }
+
+                foreach (var claim in claimsPrincipal.Claims.Except(nameClaims))
+                {
+                    claims.Add(new ClaimValue(claim.Type, claim.Value));
+                }
+
+                userInfo.Claims = claims;
+            }
+
+            var token = await _tokenClaimsService.GetTokenAsync(claimsPrincipal.Identity.Name);
+            userInfo.Token = token;
+
+            return userInfo;
+        }
     }
+
 }
 //[AllowAnonymous]
 //public IActionResult GoogleLogin()
