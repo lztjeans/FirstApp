@@ -7,7 +7,7 @@
 =====================================================================
 
 <li>V1.0 會員管理</li>
-
+主要以ASP.NET Core Identity為主配合cookies加上razor page用來呈現畫面。
 <li>Index page</li>
 
 ![image](https://github.com/lztjeans/FirstApp/assets/12146003/c5ce499e-33bb-4b73-a1d0-5f1ebcae509b)
