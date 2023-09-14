@@ -17,30 +17,25 @@ namespace FirstApp.Controllers
             _catalogViewModelService = catalogViewModelService;
         }
 
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> IndexAsync()
+        //{
+        //    ////return View();
+        //    ////return View(Repository.AllEmpoyees);
+        //    var vm = await _catalogViewModelService.GetCatalogItems(0, Constants.ITEMS_PER_PAGE, null, null);
+        //    return View(vm);
+        //}
+
+
+
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index(CatalogIndexViewModel vm, int? pageId)
         {
-            ////return View();
-            ////return View(Repository.AllEmpoyees);
-            var vm = await _catalogViewModelService.GetCatalogItems(0, Constants.ITEMS_PER_PAGE, null, null);
-            //return View("../Catalog/Index.cshtml", vm);
+            vm = await _catalogViewModelService.GetCatalogItems(pageId ?? 0, Constants.ITEMS_PER_PAGE, vm.BrandFilterApplied, vm.TypesFilterApplied);
             return View(vm);
-            //CatalogIndexViewModel vm = new CatalogIndexViewModel();
-            //vm.CatalogItems = new List<CatalogItemViewModel>();
-            //vm.Brands = _catalogViewModelService.GetBrands();
-            //vm.Types = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
-
-
-            //return View(new CatalogIndexViewModel());
         }
-
-        //[HttpGet]
-        //[AllowAnonymous ]
-        //public IActionResult Index(CatalogIndexViewModel vm, int? pageId)
-        //{
-        //    return View("../Catalog/CatalogIndex.cshtml", _catalogViewModelService.GetCatalogItems(pageId ?? 0, Constants.ITEMS_PER_PAGE, vm.BrandFilterApplied, vm.TypesFilterApplied));
-        //}
 
         //public async Task OnGet(CatalogIndexViewModel catalogModel, int? pageId)
         //{
