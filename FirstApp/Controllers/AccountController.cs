@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
 //using FirstApp.Service;
 using Microsoft.AspNetCore.Http;
+using FirstApp.ViewModels;
 
 namespace FirstApp.Controllers
 {
@@ -41,7 +42,7 @@ namespace FirstApp.Controllers
                 returnUrl = "/";
             }
 
-            Login login = new()
+            LoginViewModel login = new()
             {
                 ReturnUrl = returnUrl
             };
@@ -51,7 +52,7 @@ namespace FirstApp.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(Login login)
+        public async Task<IActionResult> Login(LoginViewModel login)
         {
             if (ModelState.IsValid)
             {

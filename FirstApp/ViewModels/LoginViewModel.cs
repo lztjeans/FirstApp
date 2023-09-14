@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FirstApp.Models
+namespace FirstApp.ViewModels
 {
-    public class Login
+    public class LoginViewModel
     {
         [Required]
         public string Email { get; set; }
