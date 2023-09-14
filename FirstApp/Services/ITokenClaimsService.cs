@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace FirstApp.Service;
+namespace FirstApp.Services;
 
 public interface ITokenClaimsService
 {

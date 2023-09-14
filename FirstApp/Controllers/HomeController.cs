@@ -11,10 +11,10 @@ namespace FirstApp.Controllers
 
         public HomeController()        {        }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
         public IActionResult Privacy()
         {

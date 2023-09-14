@@ -7,13 +7,13 @@ using NLog;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
-using FirstApp.Authorization;
+//using FirstApp.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
-using FirstApp.Service;
+//using FirstApp.Service;
 using Microsoft.AspNetCore.Http;
 
-namespace Identity.Controllers
+namespace FirstApp.Controllers
 {
     [Authorize]
     public class AccountController : Controller
@@ -21,7 +21,7 @@ namespace Identity.Controllers
         public const string SessionKeyName = "_Name";
         public const string SessionKeyAge = "_Age";
 
-        private readonly ITokenClaimsService _tokenClaimsService;
+        //private readonly ITokenClaimsService _tokenClaimsService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -186,57 +186,55 @@ namespace Identity.Controllers
             return View();
         }
 
-        [HttpGet]
-        [Authorize]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetCurrentUser() =>    Ok(await CreateUserInfo(User));
+        //[HttpGet]
+        //[Authorize]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> GetCurrentUser() =>    Ok(await CreateUserInfo(User));
+                //private async Task<UserInfo> CreateUserInfo(ClaimsPrincipal claimsPrincipal)
+        //{
+        //    if (claimsPrincipal.Identity == null || claimsPrincipal.Identity.Name == null || !claimsPrincipal.Identity.IsAuthenticated)
+        //    {
+        //        return UserInfo.Anonymous;
+        //    }
 
+        //    var userInfo = new UserInfo
+        //    {
+        //        IsAuthenticated = true
+        //    };
 
-        private async Task<UserInfo> CreateUserInfo(ClaimsPrincipal claimsPrincipal)
-        {
-            if (claimsPrincipal.Identity == null || claimsPrincipal.Identity.Name == null || !claimsPrincipal.Identity.IsAuthenticated)
-            {
-                return UserInfo.Anonymous;
-            }
+        //    if (claimsPrincipal.Identity is ClaimsIdentity claimsIdentity)
+        //    {
+        //        userInfo.NameClaimType = claimsIdentity.NameClaimType;
+        //        userInfo.RoleClaimType = claimsIdentity.RoleClaimType;
+        //    }
+        //    else
+        //    {
+        //        userInfo.NameClaimType = "name";
+        //        userInfo.RoleClaimType = "role";
+        //    }
 
-            var userInfo = new UserInfo
-            {
-                IsAuthenticated = true
-            };
+        //    if (claimsPrincipal.Claims.Any())
+        //    {
+        //        var claims = new List<ClaimValue>();
+        //        var nameClaims = claimsPrincipal.FindAll(userInfo.NameClaimType);
+        //        foreach (var claim in nameClaims)
+        //        {
+        //            claims.Add(new ClaimValue(userInfo.NameClaimType, claim.Value));
+        //        }
 
-            if (claimsPrincipal.Identity is ClaimsIdentity claimsIdentity)
-            {
-                userInfo.NameClaimType = claimsIdentity.NameClaimType;
-                userInfo.RoleClaimType = claimsIdentity.RoleClaimType;
-            }
-            else
-            {
-                userInfo.NameClaimType = "name";
-                userInfo.RoleClaimType = "role";
-            }
+        //        foreach (var claim in claimsPrincipal.Claims.Except(nameClaims))
+        //        {
+        //            claims.Add(new ClaimValue(claim.Type, claim.Value));
+        //        }
 
-            if (claimsPrincipal.Claims.Any())
-            {
-                var claims = new List<ClaimValue>();
-                var nameClaims = claimsPrincipal.FindAll(userInfo.NameClaimType);
-                foreach (var claim in nameClaims)
-                {
-                    claims.Add(new ClaimValue(userInfo.NameClaimType, claim.Value));
-                }
+        //        userInfo.Claims = claims;
+        //    }
 
-                foreach (var claim in claimsPrincipal.Claims.Except(nameClaims))
-                {
-                    claims.Add(new ClaimValue(claim.Type, claim.Value));
-                }
+        //    var token = await _tokenClaimsService.GetTokenAsync(claimsPrincipal.Identity.Name);
+        //    userInfo.Token = token;
 
-                userInfo.Claims = claims;
-            }
-
-            var token = await _tokenClaimsService.GetTokenAsync(claimsPrincipal.Identity.Name);
-            userInfo.Token = token;
-
-            return userInfo;
-        }
+        //    return userInfo;
+        //}
     }
 
 }
