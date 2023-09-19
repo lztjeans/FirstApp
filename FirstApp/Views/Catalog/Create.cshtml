@@ -1,0 +1,56 @@
+﻿@using FirstApp.ViewModels;
+@model CatalogItemViewModel
+@{
+    ViewData["Title"] = "Create";
+    var CatalogTypeData = ViewBag.Types;
+    var CatalogBrandData = ViewBag.Brands;
+}
+
+<h2>@ViewData["Title"] </h2>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Name">Product Name:</label>
+        <input class="input-validation-error" data-val="true" data-val-required="Please enter your name" asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+   </div><p></p>
+    <div class="form-group">
+        <label asp-for="Description">Description:</label>
+        <input class="input-validation-error" data-val="true" data-val-required="Please enter your Description" asp-for="Description" />
+        <span asp-validation-for="Description"></span>
+    </div><p></p>
+    <div class="form-group">
+        <label asp-for="Price">Price:</label>
+        <input asp-for="Price" />
+        <span asp-validation-for="Price"></span>
+    </div><p></p>
+
+    <div>
+        <label class="esh-catalog-label" data-title="brand">Brand:</label>
+        <select asp-for="@Model.BrandId" asp-items="@CatalogBrandData" class="esh-catalog-filter"></select>
+
+        <p></p>
+        <label class="esh-catalog-label" data-title="type">Type:</label>
+        <select asp-for="@Model.TypeId" asp-items="@CatalogTypeData" class="esh-catalog-filter"></select>
+
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label asp-for="@Model.PictureUri<"></label>
+        <input class="input-validation-error" data-val="true" data-val-required="Please enter your Email" asp-for="@Model.PictureUri<" />
+        <span asp-validation-for="@Model.PictureUri<"></span>
+    </div><p></p>
+
+    <div class="form-group"><button type="submit">Submit</button></div>
+    <div class="form-group">
+        @{
+            // foreach (ModelState modelState in ViewData.ModelState.Values) {
+            // foreach (ModelError error in modelState.Errors) {
+            // DoSomethingWith(error);
+            // }
+            // }
+            // ViewData.ModelState.Values.E
+            @Html.ValidationMessage("CreateErrors");
+            // <span class="field-validation-error" data-valmsg-for="CreateErrors" data-valmsg-replace="true"></span> 
+        }
+    </div>
+</form>

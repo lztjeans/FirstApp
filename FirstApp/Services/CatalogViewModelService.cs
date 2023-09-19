@@ -5,6 +5,8 @@ using FirstApp.Models;
 using FirstApp.Specifications;
 using NLog;
 using Microsoft.AspNetCore.Mvc;
+using FirstApp.Constants;
+using Microsoft.AspNetCore.Identity;
 
 namespace FirstApp.Service;
 
@@ -22,7 +24,7 @@ public class CatalogViewModelService : ICatalogViewModelService
         IRepository<CatalogBrand> brandRepository,
         IRepository<CatalogType> typeRepository,
         IUriComposer uriComposer)
-    {     
+    {
         _itemRepository = itemRepository;
         _brandRepository = brandRepository;
         _typeRepository = typeRepository;
@@ -104,4 +106,71 @@ public class CatalogViewModelService : ICatalogViewModelService
 
         return items;
     }
+
+    public async Task<IEnumerable<CatalogItemViewModel>> GetAllItems()
+    {
+        List< CatalogItem> ents = await _itemRepository.ListAsync();
+
+        var ret = new List< CatalogItemViewModel>();
+        ents.ForEach( ent => {
+            var e = new CatalogItemViewModel(ent)
+            {
+                BrandName = _brandRepository.GetByIdAsync(ent.CatalogBrandId).Result.Brand ,
+                TypeName= _typeRepository.GetByIdAsync(ent.CatalogTypeId).Result.Type, //,
+                BrandId = ent.CatalogBrandId,
+                TypeId = ent.CatalogTypeId
+            };
+            ret.Add(e);
+        });
+        //throw new NotImplementedException();
+        return ret;
+    }
+
+    public async Task<CatalogItemViewModel> GetItemById(int id)
+    {
+
+        CatalogItem ent = await _itemRepository.GetByIdAsync(id) ?? throw new DataNotFoundException(""+id);
+        return new CatalogItemViewModel(ent);
+    }
+
+    public CatalogItemViewModel CreateItem(CatalogItem entity)
+    {
+        try
+        {
+             _itemRepository.AddAsync(entity);
+            _itemRepository.SaveChangesAsync();
+            return  new CatalogItemViewModel(entity);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public void DeleteItem(CatalogItem entity)
+    {
+        try
+        {
+             _itemRepository.DeleteAsync(entity);
+            _itemRepository.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
 }
+
+/*
+ private async Task<BasketViewModel> CreateBasketForUser(string userId)
+{
+    var basket = new Basket(userId);
+    _basketRepository.AddAsync(basket);
+
+    return new BasketViewModel()
+    {
+        BuyerId = basket.BuyerId,
+        Id = basket.Id,
+    };
+} 
+*/

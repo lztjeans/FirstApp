@@ -8,4 +8,9 @@ public class CatalogType : BaseEntity, IAggregateRoot
     {
         Type = type;
     }
+    public CatalogType(int id, string type)
+    {
+        base.Id = id;
+        Type = type;
+    }
 }

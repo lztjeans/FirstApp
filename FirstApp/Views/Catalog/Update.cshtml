@@ -1,0 +1,45 @@
+﻿@using FirstApp.ViewModels;
+@model CatalogItemViewModel
+@{
+    ViewData["Title"] = "UPDATE Catalog";
+    var CatalogTypeData = ViewBag.Types;
+    var CatalogBrandData = ViewBag.Brands;
+}
+<a asp-action="List">View All Catalog</a>
+<h2>ViewData["Title"]</h2>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Id"></label>
+        <input asp-for="Id" class="form-control" disabled />
+    </div>
+    <div class="form-group">
+        <label asp-for="Name">Product Name:</label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+   </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Price">Price:</label>
+        <input asp-for="Price" />
+        <span asp-validation-for="Price"></span>
+   </div>
+    <div>
+        <label class="esh-catalog-label" data-title="brand">Brand:</label>
+        <select asp-for="@Model.BrandId" asp-items="@CatalogBrandData" class="esh-catalog-filter"></select> 
+        <p></p>
+        <label class="esh-catalog-label" data-title="type">Type:</label>
+        <select asp-for="@Model.TypeId" asp-items="@CatalogTypeData" class="esh-catalog-filter"></select>
+
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label asp-for="@Model.PictureUri<"></label>
+        <input class="input-validation-error" data-val="true" data-val-required="Please enter your Email" asp-for="@Model.PictureUri<" />
+        <span asp-validation-for="@Model.PictureUri<"></span>
+    </div><p></p>
+
+    <div class="form-group"><button type="submit">Submit</button></div>
+</form>

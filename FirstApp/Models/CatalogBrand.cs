@@ -9,4 +9,12 @@ public class CatalogBrand : BaseEntity, IAggregateRoot
     {
         Brand = brand;
     }
+
+    public CatalogBrand(int id, string brand)
+    {
+        base.Id = id;
+        Brand = brand;
+    }
+
+
 }

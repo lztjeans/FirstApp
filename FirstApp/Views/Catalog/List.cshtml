@@ -1,0 +1,45 @@
+﻿@using FirstApp.ViewModels;
+@model IEnumerable<CatalogItemViewModel>
+@{
+    ViewData["Title"] = "Here is the list of Products";
+    // Layout = null;
+}
+<h2>@ViewData["Title"]</h2>
+<div>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Catalog" asp-action="Create">Add Product</a>
+</div>
+<table style="width:100%" border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>PictureUri</th>
+            <th>Type Name</th>
+            <th>Brand</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (CatalogItemViewModel e in Model)
+        {
+            <tr>
+                <td>@e.Id</td>
+                <td>@e.Name</td>
+                <td>@e.Description</td>
+                <td>@e.Price</td>
+                <td>@e.PictureUri</td>
+                <td>@e.TypeName</td>
+                <td>@e.BrandName</td>
+                <td><a asp-action="Update" asp-route-id="@e.Id">Update</a></td>
+                <td>
+                    <form asp-route-id="@e.Id" asp-action="Delete" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -8,6 +8,10 @@ public class UriComposer : IUriComposer
 {
     private readonly CatalogSettings _catalogSettings;
 
+    public UriComposer()
+    {
+    }
+
     public UriComposer(CatalogSettings catalogSettings) => _catalogSettings = catalogSettings;
 
     public string ComposePicUri(string uriTemplate)
