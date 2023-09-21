@@ -15,6 +15,8 @@ namespace FirstApp.Controllers
             userManager = usrMgr;
             passwordHasher = passwordHash;
         }
+
+        [HttpGet]
         public IActionResult Index()
         {
             //return View();
@@ -23,6 +25,7 @@ namespace FirstApp.Controllers
         }
 
         // HTTP GET VERSION
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
